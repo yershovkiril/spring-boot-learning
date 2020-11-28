@@ -134,22 +134,23 @@ class UserServiceTest {
         assertThat(deleteResult).isEqualTo(1);
     }
 
-//    @Test
-//    void ShouldInsertUser() {
-//        User anna = new User(null, "anna", "montana",
-//                User.Gender.FEMALE, 30, "anna@gmail.com");
-//
-//        given(fakeDataDao.insertUser(any(UUID.class), eq(anna))).willReturn(1);
-//
-//        ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
-//
-//        int insertResult = userService.insertUser(anna);
-//        verify(fakeDataDao).insertUser(any(UUID.class), captor.capture());
-//
-//        User user = captor.getValue();
-//        assertUserFields(user);
-//        assertThat(insertResult).isEqualTo(1);
-//    }
+    @Test
+    void ShouldInsertUser() {
+        UUID userUid = UUID.randomUUID();
+        User anna = new User(userUid, "anna", "montana",
+                User.Gender.FEMALE, 30, "anna@gmail.com");
+
+        given(fakeDataDao.insertUser(any(UUID.class), any(User.class))).willReturn(1);
+
+        ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
+
+        int insertResult = userService.insertUser(anna);
+        verify(fakeDataDao).insertUser(eq(userUid), captor.capture());
+
+        User user = captor.getValue();
+        assertUserFields(user);
+        assertThat(insertResult).isEqualTo(1);
+    }
 
     private void assertUserFields(User user) {
         assertThat(user.getAge()).isEqualTo(30);
